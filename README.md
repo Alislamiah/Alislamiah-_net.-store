@@ -166,3 +166,98 @@ opacity:0.8;
 </div>
 
 </div>
+
+
+<style>
+body{
+    margin:0;
+    min-height:100vh;
+    background:linear-gradient(135deg,#001f3f,#003b73);
+    color:white;
+    font-family:"Cairo",Arial,sans-serif;
+}
+
+.download-page{
+    width:90%;
+    max-width:430px;
+    margin:70px auto;
+    text-align:center;
+    background:rgba(255,255,255,0.08);
+    padding:40px 25px;
+    border-radius:25px;
+    backdrop-filter:blur(12px);
+    box-shadow:0 10px 35px rgba(0,0,0,0.45);
+}
+
+.download-page h1{
+    font-size:34px;
+    margin-bottom:15px;
+}
+
+.download-page p{
+    font-size:18px;
+    line-height:1.8;
+    color:#eee;
+}
+
+.features{
+    margin:25px 0;
+    background:rgba(0,0,0,0.25);
+    padding:15px;
+    border-radius:18px;
+}
+
+.features div{
+    margin:12px 0;
+    font-size:16px;
+}
+
+.download-btn{
+    display:inline-block;
+    padding:16px 50px;
+    background:#00c853;
+    color:white;
+    text-decoration:none;
+    border-radius:50px;
+    font-size:21px;
+    font-weight:bold;
+    transition:.3s;
+}
+
+.download-btn:hover{
+    transform:scale(1.05);
+}
+
+.note{
+    margin-top:25px;
+    font-size:13px;
+    color:#ccc;
+}
+</style>
+
+
+<div class="download-page">
+
+<h1>Alislamiah-AI تطبيق </h1>
+
+<p>
+حمّل تطبيق Alislamiah-AI واستمتع بالمحتوى الإسلامي والتعليمي
+في مكان واحد.
+</p>
+
+<div class="features">
+<div>📱 تطبيق Android</div>
+<div>⚡ سريع وسهل الاستخدام</div>
+<div>🔒 تحميل آمن ومباشر</div>
+</div>
+
+<a class="download-btn" href="https://drive.google.com/file/d/1UaiVPAuws7ewzzmWiHVHXAMxrfVUgfWg/view?usp=drivesdk">
+⬇ تحميل التطبيق
+</a>
+
+<div class="note">
+
+جميع الحقوق محفوظة لشبكة الإسلامية ©
+</div>
+
+</div>
