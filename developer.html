@@ -1,0 +1,397 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07111f">
+<title>Developer Account</title>
+<link rel="icon" href="icon.png">
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;min-height:100vh;padding:22px;
+ display:flex;align-items:center;justify-content:center;
+ background:radial-gradient(circle at top,#153c70,transparent 45%),#050b16;
+ color:#edf5ff;font-family:Arial,sans-serif
+}
+.container{width:100%;max-width:460px}
+.brand{text-align:center;margin-bottom:25px}
+.brand img{width:65px;height:65px;object-fit:contain;border-radius:17px}
+.brand h1{font-size:25px;margin:12px 0 6px}
+.brand p{color:#91a9c7;font-size:13px}
+.panel{
+ background:#0c192c;border:1px solid #203a5c;
+ border-radius:22px;padding:24px;
+ box-shadow:0 25px 80px #0008
+}
+.step{display:none}
+.step.active{display:block}
+h2{font-size:21px;margin:0 0 10px}
+.desc{font-size:13px;color:#91a9c7;line-height:1.7;margin:0 0 22px}
+button{
+ width:100%;padding:14px;border:0;border-radius:11px;
+ background:linear-gradient(110deg,#1676e8,#35a2ff);
+ color:white;font-weight:bold;cursor:pointer;margin-top:12px;
+ font-size:14px
+}
+button:disabled{opacity:.4;cursor:not-allowed}
+.secondary{background:#142943;border:1px solid #294362}
+.account{
+ padding:15px;border:1px solid #294362;
+ background:#0a1729;border-radius:13px;
+ margin:10px 0;cursor:pointer;
+ display:flex;align-items:center;gap:12px;
+ transition:.2s
+}
+.account:hover,.account.selected{border-color:#3995ff;background:#102847}
+.avatar{
+ width:43px;height:43px;border-radius:50%;
+ display:grid;place-items:center;background:#183d68;
+ color:#8ec5ff;font-weight:bold;flex-shrink:0;overflow:hidden
+}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.account-info{flex:1;min-width:0}
+.account-info strong{display:block;font-size:14px}
+.account-info small{display:block;color:#91a9c7;margin-top:5px;overflow-wrap:anywhere}
+input[type=date],input[type=file]{
+ width:100%;padding:13px;background:#091729;
+ border:1px solid #294362;border-radius:11px;
+ color:white;margin:9px 0 17px;font-size:13px
+}
+input[type=file]{cursor:pointer}
+.field-title{font-size:13px;color:#c7d9ed;font-weight:bold}
+.status{font-size:13px;color:#ff9cac;line-height:1.6;margin:0 0 13px}
+.status.good{color:#8df0b4}
+.success-icon{
+ width:75px;height:75px;border-radius:50%;
+ background:linear-gradient(135deg,#1676e8,#35a2ff);
+ display:grid;place-items:center;margin:0 auto 20px;
+ font-size:36px
+}
+.footer{text-align:center;color:#66809f;font-size:11px;margin-top:18px}
+.hidden{display:none!important}
+.note{
+ padding:12px;background:#10243c;border:1px solid #294362;
+ border-radius:10px;color:#9bb8d8;font-size:12px;line-height:1.6;
+ margin:12px 0
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+ <div class="brand">
+  <img src="icon.png" onerror="this.style.display='none'">
+  <h1>Developer Portal</h1>
+  <p>Create and manage your developer account</p>
+ </div>
+
+ <div class="panel">
+
+  <div id="status" class="status"></div>
+
+  <!-- STEP 1 -->
+  <section class="step active" id="startStep">
+   <h2>Create a Developer Account</h2>
+   <p class="desc">
+    Join the developer platform and start publishing your applications.
+   </p>
+   <button id="startBtn">Start</button>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="step" id="accountsStep">
+   <h2>Choose Account</h2>
+   <p class="desc">Select an Alislamiah AI account to create your developer account.</p>
+
+   <div id="loading" class="desc">Loading accounts...</div>
+   <div id="accountsList"></div>
+
+   <div id="noAccounts" class="hidden">
+    <div class="note">
+     No saved accounts found. Sign in to Alislamiah AI first.
+    </div>
+    <button class="secondary" onclick="location.href='https://alislamiah.github.io/Alislamiah-AI/'">
+     Open Alislamiah AI
+    </button>
+   </div>
+
+   <button class="secondary" id="back1">Back</button>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="step" id="certificateStep">
+   <h2>Verify Your Age</h2>
+   <p class="desc">
+    Upload your birth certificate and enter your date of birth.
+    You must be 15 years old or younger.
+   </p>
+
+   <label class="field-title">Upload your birth certificate</label>
+   <input type="file" id="certificate" accept="image/*,.pdf">
+
+   <label class="field-title">Date of birth</label>
+   <input type="date" id="birthDate">
+
+   <div class="note">
+    Your birth certificate is required for age verification.
+    The document is selected locally and is not sent to a server.
+   </div>
+
+   <button id="verifyBtn">Next</button>
+   <button class="secondary" id="back2">Back</button>
+  </section>
+
+  <!-- STEP 4 -->
+  <section class="step" id="successStep">
+   <div class="success-icon">✓</div>
+   <h2 style="text-align:center">Successful</h2>
+   <p class="desc" style="text-align:center">
+    Your Developer Account registration has been completed successfully.
+   </p>
+   <div id="successAccount" class="note"></div>
+   <button id="continueBtn">Continue</button>
+  </section>
+
+ </div>
+
+ <div class="footer">
+  Developer Portal · Alislamiah
+ </div>
+</div>
+
+<script type="module">
+import {
+ initializeApp
+} from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+
+import {
+ getAuth,
+ onAuthStateChanged,
+ setPersistence,
+ browserLocalPersistence
+} from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+ apiKey: "AIzaSyBrv1ky0Br5nLb68uvdXE3o6QdzTKpIU4g",
+ authDomain: "alislamiah-ai-34202.firebaseapp.com",
+ projectId: "alislamiah-ai-34202",
+ storageBucket: "alislamiah-ai-34202.firebasestorage.app",
+ messagingSenderId: "683051452829",
+ appId: "1:683051452829:web:e96e40422c7f31e563c774",
+ measurementId: "G-LFQLND010S"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const ACCOUNTS_KEY = "alislamiah_saved_accounts";
+const CURRENT_USER_KEY = "alislamiah_current_user";
+const DEV_ACCOUNT_KEY = "alislamiah_developer_account";
+
+const $ = id => document.getElementById(id);
+
+let selectedAccount = null;
+let authReady = false;
+
+function show(id){
+ document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
+ $(id).classList.add("active");
+ $("status").textContent="";
+}
+
+function message(text,good=false){
+ $("status").textContent=text;
+ $("status").className="status"+(good?" good":"");
+}
+
+function getAccounts(){
+ try{
+  return JSON.parse(localStorage.getItem(ACCOUNTS_KEY)||"[]");
+ }catch(e){return []}
+}
+
+function escapeHTML(value){
+ return String(value||"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
+}
+
+function renderAccounts(){
+ const list=$("accountsList");
+ list.innerHTML="";
+
+ const accounts=getAccounts();
+ $("loading").classList.add("hidden");
+
+ if(!accounts.length){
+  $("noAccounts").classList.remove("hidden");
+  return;
+ }
+
+ $("noAccounts").classList.add("hidden");
+
+ accounts.forEach(acc=>{
+  const item=document.createElement("div");
+  item.className="account";
+
+  const avatar=document.createElement("div");
+  avatar.className="avatar";
+
+  if(acc.photoURL){
+   const img=document.createElement("img");
+   img.src=acc.photoURL;
+   img.alt="";
+   avatar.appendChild(img);
+  }else{
+   avatar.textContent=(acc.name||acc.email||"?").charAt(0).toUpperCase();
+  }
+
+  const info=document.createElement("div");
+  info.className="account-info";
+  info.innerHTML=`
+   <strong>${escapeHTML(acc.name||"User")}</strong>
+   <small>${escapeHTML(acc.email||"")}</small>
+  `;
+
+  item.append(avatar,info);
+
+  item.onclick=()=>{
+   selectedAccount=acc;
+   list.querySelectorAll(".account").forEach(x=>x.classList.remove("selected"));
+   item.classList.add("selected");
+
+   localStorage.setItem(CURRENT_USER_KEY,JSON.stringify({
+    id:acc.uid,
+    name:acc.name||"User",
+    email:acc.email||""
+   }));
+
+   setTimeout(()=>show("certificateStep"),180);
+  };
+
+  list.appendChild(item);
+ });
+}
+
+$("startBtn").onclick=()=>{
+ if(!authReady){
+  message("Please wait while accounts are loading.");
+  return;
+ }
+ renderAccounts();
+ show("accountsStep");
+};
+
+$("back1").onclick=()=>show("startStep");
+$("back2").onclick=()=>show("accountsStep");
+
+function calculateAge(date){
+ const birth=new Date(date+"T00:00:00");
+ const today=new Date();
+
+ if(isNaN(birth.getTime())||birth>today) return -1;
+
+ let age=today.getFullYear()-birth.getFullYear();
+
+ const beforeBirthday=
+  today.getMonth()<birth.getMonth()||
+  (today.getMonth()===birth.getMonth()&&today.getDate()<birth.getDate());
+
+ if(beforeBirthday) age--;
+
+ return age;
+}
+
+$("verifyBtn").onclick=()=>{
+ const file=$("certificate").files[0];
+ const date=$("birthDate").value;
+
+ if(!selectedAccount){
+  message("Please select an account first.");
+  return;
+ }
+
+ if(!file){
+  message("Please upload your birth certificate.");
+  return;
+ }
+
+ if(!date){
+  message("Please enter your date of birth.");
+  return;
+ }
+
+ const age=calculateAge(date);
+
+ if(age<0){
+  message("Invalid date of birth.");
+  return;
+ }
+
+ if(age>15){
+  message("Registration denied. You must be 15 years old or younger.");
+  return;
+ }
+
+ // حفظ بيانات حساب المطور فقط
+ // لا يتم حفظ ملف شهادة الميلاد
+ const developerData={
+  uid:selectedAccount.uid,
+  name:selectedAccount.name||"User",
+  email:selectedAccount.email||"",
+  photoURL:selectedAccount.photoURL||"",
+  birthDate:date,
+  age:age,
+  status:"successful",
+  createdAt:new Date().toISOString()
+ };
+
+ localStorage.setItem(DEV_ACCOUNT_KEY,JSON.stringify(developerData));
+
+ $("successAccount").textContent=
+  "Developer: "+developerData.name+
+  " | Age: "+age+
+  " | "+developerData.email;
+
+ show("successStep");
+};
+
+$("continueBtn").onclick=()=>{
+ location.href="publish.html";
+};
+
+// مزامنة الحسابات مع Firebase Auth
+try{
+ await setPersistence(auth,browserLocalPersistence);
+
+ onAuthStateChanged(auth,user=>{
+  if(user){
+   let accounts=getAccounts();
+   const index=accounts.findIndex(a=>a.uid===user.uid);
+
+   const data={
+    uid:user.uid,
+    name:user.displayName||(user.email?user.email.split("@")[0]:"User"),
+    email:user.email||"",
+    photoURL:user.photoURL||""
+   };
+
+   if(index>=0) accounts[index]=data;
+   else accounts.push(data);
+
+   localStorage.setItem(ACCOUNTS_KEY,JSON.stringify(accounts));
+  }
+
+  authReady=true;
+ });
+}catch(error){
+ authReady=true;
+ message("Account loading error: "+error.message);
+}
+</script>
+</body>
+</html>
