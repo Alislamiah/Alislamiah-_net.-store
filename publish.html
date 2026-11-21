@@ -1,0 +1,272 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07111f">
+<title>Publish App - Developer Portal</title>
+<link rel="icon" href="icon.png">
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;min-height:100vh;padding:22px;
+ display:flex;align-items:center;justify-content:center;
+ background:radial-gradient(circle at top,#153c70,transparent 45%),#050b16;
+ color:#edf5ff;font-family:Arial,sans-serif
+}
+.container{width:100%;max-width:460px}
+.brand{text-align:center;margin-bottom:25px}
+.brand img{width:65px;height:65px;object-fit:contain;border-radius:17px}
+.brand h1{font-size:25px;margin:12px 0 6px}
+.brand p{font-size:13px;color:#91a9c7}
+.panel{
+ background:#0c192c;border:1px solid #203a5c;
+ border-radius:22px;padding:24px;
+ box-shadow:0 25px 80px #0008
+}
+h2{font-size:21px;margin:0 0 10px}
+.desc{font-size:13px;color:#91a9c7;line-height:1.7;margin:0 0 22px}
+.account{
+ padding:15px;border:1px solid #294362;
+ background:#0a1729;border-radius:13px;
+ display:flex;align-items:center;gap:12px;margin-bottom:22px
+}
+.avatar{
+ width:45px;height:45px;border-radius:50%;
+ display:grid;place-items:center;
+ background:#183d68;color:#8ec5ff;
+ font-weight:bold;overflow:hidden;flex-shrink:0
+}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.info{flex:1;min-width:0}
+.info strong{display:block;font-size:14px}
+.info small{display:block;color:#91a9c7;margin-top:5px;overflow-wrap:anywhere}
+.label{font-size:13px;font-weight:bold;color:#c7d9ed}
+.upload{
+ margin-top:10px;border:1px dashed #3974ad;
+ border-radius:15px;padding:25px 15px;text-align:center;
+ background:#091729;cursor:pointer
+}
+.upload:hover{border-color:#45a5ff}
+.upload .symbol{font-size:35px;margin-bottom:12px}
+.upload strong{display:block;font-size:14px}
+.upload small{display:block;color:#91a9c7;margin-top:8px;font-size:12px}
+input[type=file]{display:none}
+.file-name{
+ color:#83c1ff;font-size:12px;margin-top:14px;
+ overflow-wrap:anywhere
+}
+button{
+ width:100%;padding:14px;border:0;border-radius:11px;
+ background:linear-gradient(110deg,#1676e8,#35a2ff);
+ color:white;font-weight:bold;cursor:pointer;
+ margin-top:15px;font-size:14px
+}
+button.secondary{background:#142943;border:1px solid #294362}
+.status{font-size:13px;color:#ff9cac;line-height:1.6;margin-top:13px}
+.success-icon{
+ width:72px;height:72px;border-radius:50%;
+ background:linear-gradient(135deg,#1676e8,#35a2ff);
+ display:grid;place-items:center;margin:0 auto 20px;font-size:35px
+}
+.note{
+ background:#10243c;border:1px solid #294362;
+ border-radius:11px;padding:13px;
+ color:#9bb8d8;font-size:12px;line-height:1.7;margin-top:15px
+}
+.footer{text-align:center;color:#66809f;font-size:11px;margin-top:18px}
+.hidden{display:none!important}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+ <div class="brand">
+  <img src="icon.png" onerror="this.style.display='none'">
+  <h1>Developer Portal</h1>
+  <p>Application Publishing Center</p>
+ </div>
+
+ <div class="panel">
+
+  <!-- ACCOUNT -->
+  <section id="publishStep">
+
+   <h2>Select a Developer Account</h2>
+   <p class="desc">
+    Choose your registered developer account.
+   </p>
+
+   <div class="account" id="accountCard">
+    <div class="avatar" id="avatar">D</div>
+    <div class="info">
+     <strong id="accountName">Loading...</strong>
+     <small id="accountEmail"></small>
+    </div>
+    <span style="color:#55adff">✓</span>
+   </div>
+
+   <h2>Publish Your App</h2>
+   <p class="desc">
+    Upload your application file to continue with the publishing process.
+   </p>
+
+   <label class="label">Upload your app file</label>
+
+   <label class="upload" for="appFile">
+    <div class="symbol">📦</div>
+    <strong>Choose App File</strong>
+    <small>Supported formats: APK and GPA</small>
+    <div class="file-name" id="fileName">No file selected</div>
+   </label>
+
+   <input type="file" id="appFile" accept=".apk,.gpa">
+
+   <div class="note">
+    Your application file must have a valid extension:
+    <br><strong>example.apk</strong>
+    <br><strong>example.gpa</strong>
+   </div>
+
+   <div class="status" id="status"></div>
+
+   <button id="nextBtn">Next</button>
+
+  </section>
+
+  <!-- NEXT -->
+  <section id="nextStep" class="hidden">
+
+   <div class="success-icon">✓</div>
+
+   <h2 style="text-align:center">Ready to Continue</h2>
+
+   <p class="desc" style="text-align:center">
+    Your developer account and application file have been selected successfully.
+   </p>
+
+   <div class="note" id="summary"></div>
+
+   <button id="adminBtn">Continue with the Admin</button>
+
+   <button class="secondary" id="backBtn">Back</button>
+
+  </section>
+
+ </div>
+
+ <div class="footer">
+  Alislamiah Developer Platform
+ </div>
+</div>
+
+<script>
+const DEV_ACCOUNT_KEY="alislamiah_developer_account";
+
+const accountCard=document.getElementById("accountCard");
+const avatar=document.getElementById("avatar");
+const accountName=document.getElementById("accountName");
+const accountEmail=document.getElementById("accountEmail");
+const appFile=document.getElementById("appFile");
+const fileName=document.getElementById("fileName");
+const status=document.getElementById("status");
+
+let developer=null;
+let selectedFile=null;
+
+function loadDeveloper(){
+ try{
+  developer=JSON.parse(localStorage.getItem(DEV_ACCOUNT_KEY)||"null");
+ }catch(e){
+  developer=null;
+ }
+
+ if(!developer||developer.status!=="successful"){
+  location.replace("developer.html");
+  return;
+ }
+
+ accountName.textContent=developer.name||"Developer";
+ accountEmail.textContent=developer.email||"";
+
+ if(developer.photoURL){
+  const img=document.createElement("img");
+  img.src=developer.photoURL;
+  img.alt="";
+  avatar.textContent="";
+  avatar.appendChild(img);
+ }else{
+  avatar.textContent=(developer.name||"D").charAt(0).toUpperCase();
+ }
+}
+
+loadDeveloper();
+
+appFile.addEventListener("change",()=>{
+ selectedFile=appFile.files[0]||null;
+ status.textContent="";
+
+ if(!selectedFile){
+  fileName.textContent="No file selected";
+  return;
+ }
+
+ fileName.textContent=selectedFile.name;
+});
+
+document.getElementById("nextBtn").onclick=()=>{
+ status.textContent="";
+
+ if(!developer){
+  status.textContent="No developer account found.";
+  return;
+ }
+
+ if(!selectedFile){
+  status.textContent="Please upload your application file.";
+  return;
+ }
+
+ const extension=selectedFile.name.split(".").pop().toLowerCase();
+
+ if(!["apk","gpa"].includes(extension)){
+  status.textContent="Invalid file. Only APK and GPA files are accepted.";
+  return;
+ }
+
+ document.getElementById("summary").innerHTML="";
+
+ const summary=document.getElementById("summary");
+
+ const accountLine=document.createElement("div");
+ accountLine.textContent="Developer: "+developer.name;
+
+ const emailLine=document.createElement("div");
+ emailLine.textContent="Account: "+developer.email;
+
+ const fileLine=document.createElement("div");
+ fileLine.textContent="Application: "+selectedFile.name;
+
+ const sizeLine=document.createElement("div");
+ sizeLine.textContent="File size: "+(selectedFile.size/1024/1024).toFixed(2)+" MB";
+
+ summary.append(accountLine,emailLine,fileLine,sizeLine);
+
+ document.getElementById("publishStep").classList.add("hidden");
+ document.getElementById("nextStep").classList.remove("hidden");
+};
+
+document.getElementById("backBtn").onclick=()=>{
+ document.getElementById("nextStep").classList.add("hidden");
+ document.getElementById("publishStep").classList.remove("hidden");
+};
+
+document.getElementById("adminBtn").onclick=()=>{
+ location.href="https://alislamiah.github.io/Alislamiah-_net/comunucation.html";
+};
+</script>
+</body>
+</html>
